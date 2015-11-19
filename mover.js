@@ -69,7 +69,10 @@ var Mover = function () {
     }
     
     function scaling(s) {
-        this.data = [1, 0, 0, 0, 1, 0, 0, 0, s];
+        if(s === 0) {
+            s = 1;
+        }
+        this.data = [1, 0, 0, 0, 1, 0, 0, 0, 1/s];
         return this;
     }
     
@@ -84,9 +87,7 @@ var Mover = function () {
     
     function apply(m, n) {
         if(typeof m == 'number') {
-            console.log(m);
             m = [m, n];
-            console.log(m);
         }
         
         var e = 1;
@@ -112,7 +113,11 @@ var Mover = function () {
     }
 
     function getRotation() {
-        var angle = Math.acos(this.data[0]) * 180 / Math.PI;
+        var rad = this.data[0];
+        if(this.data[0] > 1) {
+            rad = 1;
+        }
+        var angle = Math.acos(rad) * 180 / Math.PI;
         if(this.data[3] < 0) {
             angle = -angle;
         }
@@ -153,6 +158,16 @@ var Mover = function () {
         return this.data[8];
     }
     
+
+    function compose() {
+        var args = Array.prototype.slice.call(arguments);
+        var i;
+        for(i=0; i<args.length; i++) {
+            this.data = multiply(this.data, args[i].data);
+        }
+        return this;
+    }
+
   return {
       dump:dump,
       data:data,
@@ -177,6 +192,9 @@ var Mover = function () {
       // Combine
       rotate:rotate,
       translate:translate,
-      scale:scale
+      scale:scale,
+
+      // Compose Transforms
+      compose:compose
   };
 };
