@@ -110,6 +110,48 @@ var Mover = function () {
             }
         }
     }
+
+    function getRotation() {
+        var angle = Math.acos(this.data[0]) * 180 / Math.PI;
+        if(this.data[3] < 0) {
+            angle = -angle;
+        }
+        return angle;
+    }
+
+    function getTranslation() {
+        if(this.data[8] === 0) {
+            return [this.data[2], this.data[5]];
+        }
+        else {
+            return [this.data[2]/this.data[8], this.data[5]/this.data[8]];
+        }
+    }
+
+    function getTranslationX() {
+        if(this.data[8] === 0) {
+            return this.data[2];
+        }
+        else {
+            return this.data[2]/this.data[8];
+        }
+    }
+
+    function getTranslationY() {
+        if(this.data[8] === 0) {
+            return this.data[5];
+        }
+        else {
+            return this.data[5]/this.data[8];
+        }
+    }
+
+    function getScaling() {
+        if(this.data[8] !== 0) {
+            return 1/this.data[8];
+        }
+        return this.data[8];
+    }
     
   return {
       dump:dump,
@@ -122,6 +164,13 @@ var Mover = function () {
       translation:translation,
       scaling:scaling,
       
+      // Accessors
+      getRotation:getRotation,
+      getTranslation:getTranslation,
+      getTranslationX:getTranslationX,
+      getTranslationY:getTranslationY,
+      getScaling:getScaling,
+
       // Apply transformation to a 2D point
       apply:apply,
       

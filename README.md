@@ -37,3 +37,12 @@ You can of course chain transformations
 ```
     var newPosition = Mover().translate(1,2).rotate(90).scale(2).apply([1,1]);
 ```
+
+You can also access translation, rotation and scaling factors.
+```
+    var angleInDegrees = myMove.getRotation();
+    var vector = myMove.getTranslation();
+    var vx = myMove.getTranslationX();
+    var vy = myMove.getTranslationY();
+    var s = myMove.getScaling();
+```

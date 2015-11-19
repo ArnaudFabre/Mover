@@ -59,7 +59,29 @@ console.log(p3 + " == 3,2");
 console.log("Add a scale 2 (Homotethy => *2 )");
 l1.scale(2).dump();
 
-console.log("Chained transformation should be now translate by 2,2, then local homothety *2")
+console.log("Chained transformation should be now translate by 2,2, then local homothety *2");
 // And apply it
 var p4 = l1.apply(1,0);
 console.log(p4 + " == 4,2");
+
+console.log("Test accessors");
+
+console.log(l1.getTranslation());
+console.log(l1.getTranslationX());
+console.log(l1.getTranslationY());
+console.log(l1.getRotation());
+console.log(l1.getScaling());
+
+var l2 = Mover().rotation(90);
+
+console.log(l2.getTranslation());
+console.log(l2.getTranslationX());
+console.log(l2.getTranslationY());
+console.log(l2.getRotation());
+console.log(l1.getScaling());
+
+console.log(Mover().rotate(-90).getRotation());
+console.log(Mover().rotate(-180).getRotation());
+console.log(Mover().rotate(180).getRotation());
+
+
