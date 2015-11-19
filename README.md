@@ -33,7 +33,7 @@ Apply transformation to a 2D point
     newPosition = myMove.apply(1,0);
 ```
     
-You can of course chained transformations
+You can of course chain transformations
 ```
     var newPosition = Mover().translate(1,2).rotate(90).scale(2).apply([1,1]);
 ```
