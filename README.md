@@ -46,3 +46,8 @@ You can also access translation, rotation and scaling factors.
     var vy = myMove.getTranslationY();
     var s = myMove.getScaling();
 ```
+
+And compose different Movers into new ones :
+```
+    var moves = Mover().compose(myMove, otherMove, anotherOne, andLastMove);
+```
