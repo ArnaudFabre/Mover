@@ -2,6 +2,9 @@ var Mover = function () {
     
     // Fix Javascript rounding errors
     var rounder = 1e5;
+    function round(x) {
+        return Math.round(x*rounder)/rounder;
+    }
     
     // Default is identity
     var data = [1, 0, 0, 0, 1, 0, 0, 0, 1];
@@ -23,7 +26,7 @@ var Mover = function () {
         for(i=0; i<3; i++) {
             for(j=0; j<3; j++) {
                 for(k=0; k<3; k++) {
-                    m3[i+3*j] += m2[i+3*k]*m1[k+3*j];
+                    m3[i+3*j] += round(m2[i+3*k]*m1[k+3*j]);
                 }
             }
         }
@@ -53,18 +56,32 @@ var Mover = function () {
     
     function rotation(angle) {
         var rad = angle*Math.PI/180;
-        var cos = Math.round(Math.cos(rad)*rounder)/rounder;
-        var sin = Math.round(Math.sin(rad)*rounder)/rounder;
+        var cos = round(Math.cos(rad));
+        var sin = round(Math.sin(rad));
         this.data = [cos, -sin, 0, sin, cos, 0, 0, 0, 1];
         return this;
     }
     
-    function rotate(angle) {
+    function rotate(angle, x, y) {
+        var center = false;
+        if(x || y)
+        {
+            x = x || 0;
+            y = y || 0;
+            center = true;
+        }
         var rad = angle*Math.PI/180;
-        var cos = Math.round(Math.cos(rad)*rounder)/rounder;
-        var sin = Math.round(Math.sin(rad)*rounder)/rounder;
+        var cos = round(Math.cos(rad));
+        var sin = round(Math.sin(rad));
         var rotation = [cos, -sin, 0, sin, cos, 0, 0, 0, 1];
+
+        if(center) {
+            this.translate(x, y);
+        }
         this.data = multiply(this.data, rotation);
+        if(center) {
+            this.translate(-x, -y);
+        }
         return this;
     }
     
@@ -95,21 +112,14 @@ var Mover = function () {
             e = m[2];
         }
         
-        var x = m[0]*this.data[0] + m[1]*this.data[1] + e*this.data[2];
-        var y = m[0]*this.data[3] + m[1]*this.data[4] + e*this.data[5];
-        var w = m[0]*this.data[6] + m[1]*this.data[7] + e*this.data[8];
+        var x = round(m[0]*this.data[0] + m[1]*this.data[1] + e*this.data[2]);
+        var y = round(m[0]*this.data[3] + m[1]*this.data[4] + e*this.data[5]);
+        var w = round(m[0]*this.data[6] + m[1]*this.data[7] + e*this.data[8]);
         
-        if(m.length == 3) {
-            return [x, y, w];
-        }
-        else {
-            if(w !== 0) {
-                return [x/w, y/w];
-            }
-            else {
-                return [x, y];
-            }
-        }
+        if(w !== 0)
+            return [x/w, y/w];
+        else
+            return [x, y];
     }
 
     function getRotation() {
@@ -117,7 +127,12 @@ var Mover = function () {
         if(this.data[0] > 1) {
             rad = 1;
         }
-        var angle = Math.acos(rad) * 180 / Math.PI;
+        else {
+            if(this.data[0] < -1) {
+                rad = -1;
+            }
+        }
+        var angle = round(Math.acos(rad) * 180 / Math.PI);
         if(this.data[3] < 0) {
             angle = -angle;
         }
@@ -152,12 +167,8 @@ var Mover = function () {
     }
 
     function getScaling() {
-        if(this.data[8] !== 0) {
-            return 1/this.data[8];
-        }
-        return this.data[8];
+        return 1/this.data[8];
     }
-    
 
     function compose() {
         var args = Array.prototype.slice.call(arguments);
