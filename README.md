@@ -21,6 +21,7 @@ Translate it by 1 in x direction and 2 in y direction :
 Rotate it by 90 degrees:
 ```   
     myMove.rotate(90);
+    myMove.rotate(90, center_x, center_y);
 ```
 Scale it by 2 in x and y direction (origin is always local 0,0) :
 ```
