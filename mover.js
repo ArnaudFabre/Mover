@@ -170,14 +170,23 @@ var Mover = function () {
     }
 
     function getTranslation() {
+        if(this.data[8] !== 0 ) {
+            return [this.data[2]/this.data[8], this.data[5]/this.data[8]];
+        }
         return [this.data[2], this.data[5]];
     }
 
     function getTranslationX() {
+        if(this.data[8] !== 0 ) {
+            return this.data[2]/this.data[8];
+        }
         return this.data[2];
     }
 
     function getTranslationY() {
+        if(this.data[8] !== 0 ) {
+            return this.data[5]/this.data[8];
+        }
         return this.data[5];
     }
 
