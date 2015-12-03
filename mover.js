@@ -57,7 +57,6 @@ var Mover = function () {
             center = true;
         }
         var translation = [1, 0, x, 0, 1, y, 0, 0, 1];
-
         if(center) {
             this.translate(cx, cy);
         }
@@ -91,6 +90,7 @@ var Mover = function () {
 
         if(center) {
             this.translate(x, y);
+
         }
         this.data = multiply(this.data, rotation);
         if(center) {
@@ -131,6 +131,7 @@ var Mover = function () {
     }
 
     function apply(m, n) {
+
         if(typeof m == 'number') {
             m = [m, n];
         }
@@ -203,6 +204,14 @@ var Mover = function () {
         return this;
     }
 
+    function css() {
+        var str = '';
+        str += 'translate('+ this.getTranslationX() + 'px, ' + this.getTranslationY() + 'px) ';
+        str += 'rotate(' +  this.getRotation() +'deg) ';
+        str += 'scale('+ this.getScaling() + ', ' + this.getScaling() + ') ';
+        return str;
+    }
+
     return {
         dump:dump,
         data:data,
@@ -220,6 +229,7 @@ var Mover = function () {
         getTranslationX:getTranslationX,
         getTranslationY:getTranslationY,
         getScaling:getScaling,
+        css:css,
 
         // Apply transformation to a 2D point
         apply:apply,
@@ -233,3 +243,132 @@ var Mover = function () {
         compose:compose
     };
 };
+
+var Boxer = function (width, height) {
+    var me = Mover();
+    var boxes = [];
+
+    width = width || 0;
+    height = height || 0;
+    var w = width;
+    var h = height;
+    var centerX = w/2;
+    var centerY = h/2;
+
+    function push(littleBox) {
+        this.boxes.push(littleBox);
+        this.box();
+        return this;
+    }
+
+    function computeBB(current, newb) { // Compute Bounding Box from 2 BB
+        if(current[0] > newb[0]) {
+            current[0] = newb[0];
+        }
+        if(current[1] > newb[1]) {
+            current[1] = newb[1];
+        }
+        if(current[2] < newb[2]) {
+            current[2] = newb[2];
+        }
+        if(current[3] < newb[3]) {
+            current[3] = newb[3];
+        }
+        return current;
+    }
+
+    function box() {
+        var current = [0, 0, 0, 0];
+
+        if(this.boxes.length === 0) {
+            // Object
+            var m = this.me;
+            var p = [];
+
+            p.push(m.apply(0,0)); // top left
+            p.push(m.apply(this.width,0)); // top rigth
+            p.push(m.apply(0,this.height)); // bottom left
+            p.push(m.apply(this.width,this.height)); // bottom right
+
+            var init = true;
+            for(var i in p) {
+                var b = [ p[i][0], p[i][1], p[i][0], p[i][1] ];
+                if(init) {
+                    current = b;
+                    init = false;
+                }
+                else {
+                    current = computeBB(current, b);
+                }
+            }
+        }
+        else {
+            // Container
+            var init = true;
+            for(var i in this.boxes) {
+                var b = this.boxes[i].box();
+                if(init) {
+                    current = b;
+                    init = false;
+                }
+                else {
+                    current = computeBB(current, b);
+                }
+            }
+        }
+        this.centerX = current[0] + (current[2] - current[0])/2;
+        this.centerY = current[1] + (current[3] - current[1])/2;
+        return current;
+    }
+
+    function css(i) {
+        var m = this.mover();
+        if(typeof i == 'number') {
+            var m2 = this.boxes[i].mover();
+            m = Mover().compose(m, m2);
+        }
+        return m.css();
+    }
+
+    function translate(x, y) {
+        this.me = Mover().translate(x,y).compose(this.me);
+        return this;
+    }
+
+    function rotate(angle) {
+        if(this.boxes.length !== 0) {
+            this.box();
+        }
+        this.me.rotate(angle, this.centerX, this.centerY);
+        return this;
+    }
+
+    function scale(s) {
+        if(this.boxes.length !== 0) {
+            this.box();
+        }
+        this.me.scale(s/100, this.centerX, this.centerY);
+        return this;
+    }
+
+    function getMover() {
+        return this.me;
+    }
+
+    return {
+        me:me,
+        boxes:boxes,
+        push:push,
+        width:w,
+        height:h,
+        centerX: centerX,
+        centerY: centerY,
+        translate:translate,
+        rotate:rotate,
+        scale:scale,
+        css:css,
+        mover:getMover,
+        box:box
+    };
+};
+
