@@ -1,15 +1,69 @@
 <html>
-<head>
-<script src="../mover.js"></script>
-</head>
-<body>
+    <head>
+        <script src="../mover.js"></script>
+    </head>
+    <body>
+        <h1>Mover playground</h1>
 
-<h1>Mover basic tests</h1>
-    
-<div id="log">
-</div>
-    
-<script src="testing.js"></script>    
+        <div id="interface2" style="position:absolute; right:0; top:0">
+            <h2>Red</h2>
+            <button onclick="l1.translate(0,-10);update();">Top</button>
+            <button onclick="l1.translate(-10,0);update();">Left</button>
+            <button onclick="l1.translate(10,0);update();">Right</button>
+            <button onclick="l1.translate(0,10);update();">Bottom</button>
+            <div>
+                <button onclick="l1.rotate(10);update();">+10</button>
+                <button onclick="l1.rotate(-10);update();">-10</button>
+                <button onclick="l1.scale(50);update();">/2</button>
+                <button onclick="l1.scale(200);update();">x2</button>
+            </div>
+        </div>
 
-</body>
+        <div id="interface" style="position:absolute; right:0; top:100">
+            <h2>Blue</h2>
+            <button onclick="l2.translate(0,-10);update();">Top</button>
+            <button onclick="l2.translate(-10,0);update();">Left</button>
+            <button onclick="l2.translate(10,0);update();">Right</button>
+            <button onclick="l2.translate(0,10);update();">Bottom</button>
+            <div>
+                <button onclick="l2.rotate(10);update();">+10</button>
+                <button onclick="l2.rotate(-10);update();">-10</button>
+                <button onclick="l2.scale(50);update();">/2</button>
+                <button onclick="l2.scale(200);update();">x2</button>
+            </div>
+        </div>
+
+        <div id="interface3" style="position:absolute; right:0; top:200">
+            <h2>Both</h2>
+            <button onclick="p.translate(0,-10);update();">Top</button>
+            <button onclick="p.translate(-10,0);update();">Left</button>
+            <button onclick="p.translate(10,0);update();">Right</button>
+            <button onclick="p.translate(0,10);update();">Bottom</button>
+            <div>
+                <button onclick="p.rotate(10);update();">+10</button>
+                <button onclick="p.rotate(-10);update();">-10</button>
+                <button onclick="p.scale(50);update();">/2</button>
+                <button onclick="p.scale(200);update();">x2</button>
+            </div>
+        </div>
+
+        <div id="interface5" style="position:absolute; right:0; top:300">
+            <h2>Red 2</h2>
+            <button onclick="l3t.translate(0,-10);update();">Top</button>
+            <button onclick="l3t.translate(-10,0);update();">Left</button>
+            <button onclick="l3t.translate(10,0);update();">Right</button>
+            <button onclick="l3t.translate(0,10);update();">Bottom</button>
+            <div>
+                <button onclick="l3.rotate(10);update();">+10</button>
+                <button onclick="l3.rotate(-10);update();">-10</button>
+                <button onclick="l3.scale(50);update();">/5</button>
+                <button onclick="l3.scale(200);update();">x2</button>
+            </div>
+        </div>
+
+        <img id="red" src="red.png" style="position:absolute; top:0; left:0; transform-origin: 0 0">
+        <img id="blue" src="blue.png" style="position:absolute; top:0; left:0; transform-origin: 0 0">
+
+        <script src="testing.js"></script>
+    </body>
 </html>
