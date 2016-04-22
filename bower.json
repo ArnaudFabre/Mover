@@ -1,0 +1,23 @@
+{
+  "name": "Mover",
+  "homepage": "https://github.com/ArnaudFabre/Mover",
+  "authors": [
+    "Arnaud Fabre <arnaud.fabre@gmail.com>"
+  ],
+  "description": "Abstract 2D transformations",
+  "main": "mover.js",
+  "moduleType": [],
+  "keywords": [
+    "2D",
+    "homogeneous",
+    "coordinates"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
